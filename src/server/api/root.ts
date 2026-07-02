@@ -12,6 +12,7 @@ import { newsRouter } from "./routers/news";
 import { aiRouter } from "./routers/ai";
 import { recruitmentRouter } from "./routers/recruitment";
 import { documentsRouter } from "./routers/documents";
+import { billingRouter } from "./routers/billing";
 
 /**
  * This is the primary router for your server.
@@ -32,6 +33,7 @@ export const appRouter = createTRPCRouter({
   ai: aiRouter,
   recruitment: recruitmentRouter,
   documents: documentsRouter,
+  billing: billingRouter,
 });
 
 // export type definition of API

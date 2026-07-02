@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { PayrollService } from "../services/payroll.service";
+import { assertFeatureAccess } from "../services/billing.service";
 import { accessControl } from "../middleware/casl-middleware";
 
 export const payrollRouter = createTRPCRouter({
@@ -14,6 +15,10 @@ export const payrollRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const orgId = ctx.session.session.activeOrganizationId;
+      if (orgId) {
+        await assertFeatureAccess(orgId, "payroll");
+      }
       return PayrollService.setSalarySettings(ctx.session, input);
     }),
 
@@ -48,6 +53,10 @@ export const payrollRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const orgId = ctx.session.session.activeOrganizationId;
+      if (orgId) {
+        await assertFeatureAccess(orgId, "payroll");
+      }
       return PayrollService.generatePayroll(ctx.session, input);
     }),
 

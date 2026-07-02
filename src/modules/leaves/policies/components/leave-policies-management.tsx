@@ -135,9 +135,7 @@ export function LeavePoliciesManagement() {
       return;
     }
 
-    syncBalancesMutation.mutate({
-      organizationId: session.session.activeOrganizationId,
-    });
+    syncBalancesMutation.mutate();
   };
 
   return (

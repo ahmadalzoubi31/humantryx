@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import {
   createTRPCRouter,
@@ -5,6 +6,7 @@ import {
   publicProcedure,
 } from "@/server/api/trpc";
 import { RecruitmentService } from "@/server/api/services/recruitment.service";
+import { assertFeatureAccess } from "@/server/api/services/billing.service";
 import {
   jobStatusEnum,
   jobLocationTypeEnum,
@@ -85,6 +87,11 @@ export const recruitmentRouter = createTRPCRouter({
         throw new Error("No active organization");
       }
 
+      await assertFeatureAccess(
+        ctx.session.session.activeOrganizationId,
+        "recruitment",
+      );
+
       return RecruitmentService.createJobPosting({
         ...input,
         organizationId: ctx.session.session.activeOrganizationId,
@@ -95,8 +102,16 @@ export const recruitmentRouter = createTRPCRouter({
   // Get job posting by ID
   getById: protectedProcedure
     .input(z.object({ id: z.string().uuid() }))
-    .query(async ({ input }) => {
-      return RecruitmentService.getJobPostingById(input.id);
+    .query(async ({ input, ctx }) => {
+      const orgId = ctx.session.session.activeOrganizationId;
+      if (!orgId) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "No active organization" });
+      }
+      const job = await RecruitmentService.getJobPostingById(input.id);
+      if (!job || job.organizationId !== orgId) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Job posting not found" });
+      }
+      return job;
     }),
 
   // Get job posting by organization ID and job ID (public route for shareable URLs)
@@ -131,14 +146,30 @@ export const recruitmentRouter = createTRPCRouter({
   // Update job posting
   update: protectedProcedure
     .input(updateJobPostingSchema)
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
+      const orgId = ctx.session.session.activeOrganizationId;
+      if (!orgId) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "No active organization" });
+      }
+      const job = await RecruitmentService.getJobPostingById(input.id);
+      if (!job || job.organizationId !== orgId) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Job posting not found" });
+      }
       return RecruitmentService.updateJobPosting(input);
     }),
 
   // Delete job posting
   delete: protectedProcedure
     .input(z.object({ id: z.string().uuid() }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
+      const orgId = ctx.session.session.activeOrganizationId;
+      if (!orgId) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "No active organization" });
+      }
+      const job = await RecruitmentService.getJobPostingById(input.id);
+      if (!job || job.organizationId !== orgId) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Job posting not found" });
+      }
       return RecruitmentService.deleteJobPosting(input.id);
     }),
 
@@ -207,21 +238,31 @@ export const recruitmentRouter = createTRPCRouter({
   // Publish job (change status to open)
   publish: protectedProcedure
     .input(z.object({ id: z.string().uuid() }))
-    .mutation(async ({ input }) => {
-      return RecruitmentService.updateJobPosting({
-        id: input.id,
-        status: "open",
-      });
+    .mutation(async ({ input, ctx }) => {
+      const orgId = ctx.session.session.activeOrganizationId;
+      if (!orgId) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "No active organization" });
+      }
+      const job = await RecruitmentService.getJobPostingById(input.id);
+      if (!job || job.organizationId !== orgId) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Job posting not found" });
+      }
+      return RecruitmentService.updateJobPosting({ id: input.id, status: "open" });
     }),
 
   // Close job (change status to closed)
   close: protectedProcedure
     .input(z.object({ id: z.string().uuid() }))
-    .mutation(async ({ input }) => {
-      return RecruitmentService.updateJobPosting({
-        id: input.id,
-        status: "closed",
-      });
+    .mutation(async ({ input, ctx }) => {
+      const orgId = ctx.session.session.activeOrganizationId;
+      if (!orgId) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "No active organization" });
+      }
+      const job = await RecruitmentService.getJobPostingById(input.id);
+      if (!job || job.organizationId !== orgId) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Job posting not found" });
+      }
+      return RecruitmentService.updateJobPosting({ id: input.id, status: "closed" });
     }),
 
   // Create AI screening result

@@ -12,6 +12,7 @@ import { Users, Building2, UserX, Shield, Loader2 } from "lucide-react";
 import { OrganizationsTable } from "../organizations/organizations-table";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
+import { siteConfig } from "@/lib/site-config";
 
 export function SuperAdminDashboard() {
   const router = useRouter();
@@ -22,7 +23,7 @@ export function SuperAdminDashboard() {
       <div className="space-y-2">
         <h1 className="text-3xl font-bold">Welcome, Super Admin</h1>
         <p className="text-muted-foreground">
-          Manage and monitor your Humantryx system
+          Manage and monitor your {siteConfig.name} system
         </p>
       </div>
 

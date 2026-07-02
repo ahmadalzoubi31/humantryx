@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
+import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
 interface LogoProps {
@@ -81,7 +82,7 @@ export function Logo({
         )}
       >
         <div className="relative">
-          <span className={cn("font-bold text-white", config.icon)}>H</span>
+          <span className={cn("font-bold text-white", config.icon)}>{siteConfig.logoText}</span>
           <div
             className={cn(
               "bg-accent absolute -top-1 -right-1 animate-pulse rounded-full",
@@ -100,7 +101,7 @@ export function Logo({
         config.text,
       )}
     >
-      Humantryx
+      {siteConfig.name}
     </span>
   );
 

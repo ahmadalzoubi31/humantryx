@@ -211,6 +211,13 @@
       "when": 1760813460356,
       "tag": "0029_spooky_colossus",
       "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1782869223963,
+      "tag": "0030_young_rattler",
+      "breakpoints": true
     }
   ]
 }

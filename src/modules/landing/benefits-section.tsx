@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { siteConfig } from "@/lib/site-config";
 import { X, CheckCircle, Cpu, Zap, FileText, BarChart3 } from "lucide-react";
 
 export function BenefitsSection() {
@@ -182,7 +183,7 @@ export function BenefitsSection() {
                       variant="default"
                       className="bg-green-600 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white hover:bg-green-700"
                     >
-                      Humantryx Way
+                      {siteConfig.name} Way
                     </Badge>
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
                       <comparison.modern.icon className="h-5 w-5 text-green-600 dark:text-green-400" />

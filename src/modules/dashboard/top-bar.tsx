@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { siteConfig } from "@/lib/site-config";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,7 +37,7 @@ export function DashboardTopNav({ children }: DashboardTopNavProps) {
                 <div className="bg-accent absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full" />
               </div>
               <span className="text-foreground text-lg font-bold">
-                Humantryx
+                {siteConfig.name}
               </span>
             </Link>
           </div>

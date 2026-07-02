@@ -1,4 +1,5 @@
 import type { EmployeeDesignation } from "@/server/db/consts";
+import { siteConfig } from "@/lib/site-config";
 import {
   Body,
   Button,
@@ -104,7 +105,7 @@ export const EmployeeInvitationEmail = ({
               <Text className="text-sm text-[#6b7280]">
                 Best regards,
                 <br />
-                The Humantryx Team
+                The {siteConfig.name} Team
               </Text>
             </Section>
           </Container>
@@ -119,5 +120,5 @@ EmployeeInvitationEmail.PreviewProps = {
   organizationName: "Acme Inc",
   designation: "Software Engineer",
   invitationId: "inv_123456789",
-  appUrl: "http://localhost:3000",
+  appUrl: "http://localhost:3001",
 };

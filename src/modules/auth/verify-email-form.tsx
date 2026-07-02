@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
+import { siteConfig } from "@/lib/site-config";
 import {
   Card,
   CardContent,
@@ -85,7 +86,7 @@ export function VerifyEmailForm() {
               Email Verification Required
             </CardTitle>
             <CardDescription className="text-gray-600 dark:text-gray-400">
-              Please verify your email address to continue using Humantryx
+              Please verify your email address to continue using {siteConfig.name}
             </CardDescription>
           </div>
         </CardHeader>

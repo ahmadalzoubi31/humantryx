@@ -3,6 +3,7 @@ import { type ErrorContext } from "@better-fetch/fetch";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
+import { siteConfig } from "@/lib/site-config";
 import { useForm } from "react-hook-form";
 import {
   Card,
@@ -140,7 +141,7 @@ function ResetPasswordFormNoSuspense() {
             <div className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-green-400" />
           </div>
           <span className="text-foreground ml-2 text-xl font-bold">
-            Humantryx
+            {siteConfig.name}
           </span>
         </Link>
       </div>

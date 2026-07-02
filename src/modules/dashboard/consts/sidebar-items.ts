@@ -9,6 +9,7 @@ import {
   Newspaper,
   Briefcase,
   FileText,
+  Settings,
 } from "lucide-react";
 
 type MenuItem = {
@@ -167,6 +168,19 @@ export const getMenuItems = (ability: AppAbility) => {
         {
           title: "Announcements",
           href: "/dashboard/company/announcements",
+        },
+      ],
+    },
+    {
+      title: "Settings",
+      icon: Settings,
+      href: "/dashboard/settings",
+      enabled: ability.can("manage", "Employee"),
+      submenu: [
+        {
+          title: "Billing",
+          href: "/dashboard/settings/billing",
+          enabled: ability.can("manage", "Employee"),
         },
       ],
     },

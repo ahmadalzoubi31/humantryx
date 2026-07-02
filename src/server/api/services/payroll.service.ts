@@ -16,7 +16,12 @@ type Session = {
 export class PayrollService {
   static async validateHRAccess(session: Session) {
     const employee = await db.query.employees.findFirst({
-      where: eq(employees.userId, session.user.id),
+      where: session.session.activeOrganizationId
+        ? and(
+            eq(employees.userId, session.user.id),
+            eq(employees.organizationId, session.session.activeOrganizationId),
+          )
+        : eq(employees.userId, session.user.id),
       with: {
         user: true,
       },
@@ -39,9 +44,14 @@ export class PayrollService {
     return employee;
   }
 
-  static async validateEmployee(userId: string) {
+  static async validateEmployee(userId: string, organizationId?: string) {
     const employee = await db.query.employees.findFirst({
-      where: eq(employees.userId, userId),
+      where: organizationId
+        ? and(
+            eq(employees.userId, userId),
+            eq(employees.organizationId, organizationId),
+          )
+        : eq(employees.userId, userId),
       with: {
         user: true,
       },
@@ -108,7 +118,7 @@ export class PayrollService {
     let targetEmployeeId = employeeId;
 
     if (!employeeId) {
-      const employee = await this.validateEmployee(session.user.id);
+      const employee = await this.validateEmployee(session.user.id, session.session.activeOrganizationId ?? undefined);
       targetEmployeeId = employee.id;
     }
 
@@ -218,7 +228,7 @@ export class PayrollService {
       year?: number;
     } = {},
   ) {
-    const currentEmployee = await this.validateEmployee(session.user.id);
+    const currentEmployee = await this.validateEmployee(session.user.id, session.session.activeOrganizationId ?? undefined);
     const isHRAdmin = ["hr", "founder"].includes(currentEmployee.designation);
 
     const whereConditions = [];
@@ -303,7 +313,7 @@ export class PayrollService {
 
   // Get payroll by ID (for salary slip generation)
   static async getPayrollById(session: Session, payrollId: string) {
-    const currentEmployee = await this.validateEmployee(session.user.id);
+    const currentEmployee = await this.validateEmployee(session.user.id, session.session.activeOrganizationId ?? undefined);
     const isHRAdmin = ["hr", "founder"].includes(currentEmployee.designation);
 
     const payroll = await db.query.payrollRecords.findFirst({

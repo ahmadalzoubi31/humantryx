@@ -24,9 +24,14 @@ type Session = {
 type LeaveType = (typeof leaveTypeEnum.enumValues)[number];
 
 export class LeaveService {
-  static async validateEmployee(userId: string) {
+  static async validateEmployee(userId: string, organizationId?: string) {
     const employee = await db.query.employees.findFirst({
-      where: eq(employees.userId, userId),
+      where: organizationId
+        ? and(
+            eq(employees.userId, userId),
+            eq(employees.organizationId, organizationId),
+          )
+        : eq(employees.userId, userId),
     });
 
     if (!employee) {
@@ -115,7 +120,10 @@ export class LeaveService {
   }
 
   static async createLeaveRequest(input: CreateLeaveRequest, session: Session) {
-    const employee = await this.validateEmployee(session.user.id);
+    const employee = await this.validateEmployee(
+      session.user.id,
+      session.session.activeOrganizationId ?? undefined,
+    );
     const totalDays = this.calculateTotalDays(input.startDate, input.endDate);
 
     await this.checkLeaveBalance(
@@ -266,7 +274,10 @@ export class LeaveService {
 
   static async updateLeaveStatus(input: ApproveRejectLeave, session: Session) {
     await this.validateHRAccess(session);
-    const approverEmployee = await this.validateEmployee(session.user.id);
+    const approverEmployee = await this.validateEmployee(
+      session.user.id,
+      session.session.activeOrganizationId ?? undefined,
+    );
 
     const request = await db.query.leaveRequests.findFirst({
       where: eq(leaveRequests.id, input.id),
@@ -342,7 +353,10 @@ export class LeaveService {
     let targetEmployeeId: string;
 
     if (!employeeId) {
-      const currentEmployee = await this.validateEmployee(session.user.id);
+      const currentEmployee = await this.validateEmployee(
+        session.user.id,
+        session.session.activeOrganizationId ?? undefined,
+      );
       targetEmployeeId = currentEmployee.id;
     } else {
       targetEmployeeId = employeeId;

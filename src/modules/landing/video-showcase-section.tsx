@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { siteConfig } from "@/lib/site-config";
 import { Calendar, UserCheck, MessageSquare, Zap } from "lucide-react";
 
 const videoFeatures = [
@@ -85,7 +86,7 @@ export function VideoShowcaseSection() {
             </span>
           </h2>
           <p className="text-muted-foreground mx-auto max-w-3xl text-lg font-medium leading-relaxed sm:text-xl">
-            Watch how Humantryx transforms traditional HR processes with
+            Watch how {siteConfig.name} transforms traditional HR processes with
             cutting-edge AI technology. Every feature is designed to save time,
             reduce bias, and enhance decision-making.
           </p>

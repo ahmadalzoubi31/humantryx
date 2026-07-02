@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { siteConfig } from "@/lib/site-config";
 import {
   ArrowRight,
   Zap,
@@ -44,7 +45,7 @@ export function HeroSection() {
               className="border-primary/10 bg-primary/5 px-4 py-2 text-sm font-medium tracking-wide shadow-sm backdrop-blur-sm"
             >
               <Zap className="text-primary mr-2 h-4 w-4" />
-              Next-Gen HRMS Platform
+              {siteConfig.description}
             </Badge>
           </motion.div>
 

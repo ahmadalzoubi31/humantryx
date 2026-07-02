@@ -1,4 +1,5 @@
 import { PageHeader } from "@/modules/superadmin/components/page-header";
+import { siteConfig } from "@/lib/site-config";
 import {
   Card,
   CardContent,
@@ -28,8 +29,8 @@ export default function Settings() {
               <Label htmlFor="system-name">System Name</Label>
               <Input
                 id="system-name"
-                placeholder="Humantryx"
-                defaultValue="Humantryx"
+                placeholder={siteConfig.name}
+                defaultValue={siteConfig.name}
               />
             </div>
 

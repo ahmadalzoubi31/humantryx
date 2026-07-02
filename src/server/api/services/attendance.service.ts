@@ -10,9 +10,14 @@ type Session = {
 };
 
 export class AttendanceService {
-  static async validateEmployee(userId: string) {
+  static async validateEmployee(userId: string, organizationId?: string) {
     const employee = await db.query.employees.findFirst({
-      where: eq(employees.userId, userId),
+      where: organizationId
+        ? and(
+            eq(employees.userId, userId),
+            eq(employees.organizationId, organizationId),
+          )
+        : eq(employees.userId, userId),
       with: {
         user: true,
       },
@@ -29,7 +34,7 @@ export class AttendanceService {
   }
 
   static async validateHRAccess(session: Session) {
-    const employee = await this.validateEmployee(session.user.id);
+    const employee = await this.validateEmployee(session.user.id, session.session.activeOrganizationId ?? undefined);
 
     if (!["hr", "founder"].includes(employee.designation)) {
       throw new TRPCError({
@@ -42,7 +47,7 @@ export class AttendanceService {
   }
 
   static async clockIn(session: Session, notes?: string) {
-    const employee = await this.validateEmployee(session.user.id);
+    const employee = await this.validateEmployee(session.user.id, session.session.activeOrganizationId ?? undefined);
 
     // Check if already clocked in
     const existingRecord = await db.query.attendanceRecords.findFirst({
@@ -73,7 +78,7 @@ export class AttendanceService {
   }
 
   static async clockOut(session: Session, notes?: string) {
-    const employee = await this.validateEmployee(session.user.id);
+    const employee = await this.validateEmployee(session.user.id, session.session.activeOrganizationId ?? undefined);
 
     // Find the active clock-in record
     const activeRecord = await db.query.attendanceRecords.findFirst({
@@ -125,7 +130,7 @@ export class AttendanceService {
   }
 
   static async startBreak(session: Session) {
-    const employee = await this.validateEmployee(session.user.id);
+    const employee = await this.validateEmployee(session.user.id, session.session.activeOrganizationId ?? undefined);
 
     const activeRecord = await db.query.attendanceRecords.findFirst({
       where: and(
@@ -162,7 +167,7 @@ export class AttendanceService {
   }
 
   static async endBreak(session: Session) {
-    const employee = await this.validateEmployee(session.user.id);
+    const employee = await this.validateEmployee(session.user.id, session.session.activeOrganizationId ?? undefined);
 
     const activeRecord = await db.query.attendanceRecords.findFirst({
       where: and(
@@ -192,7 +197,7 @@ export class AttendanceService {
   }
 
   static async getCurrentStatus(session: Session) {
-    const employee = await this.validateEmployee(session.user.id);
+    const employee = await this.validateEmployee(session.user.id, session.session.activeOrganizationId ?? undefined);
 
     const activeRecord = await db.query.attendanceRecords.findFirst({
       where: and(
@@ -228,7 +233,7 @@ export class AttendanceService {
   ) {
     const { employeeId, startDate, endDate, page, limit } = options;
 
-    const currentEmployee = await this.validateEmployee(session.user.id);
+    const currentEmployee = await this.validateEmployee(session.user.id, session.session.activeOrganizationId ?? undefined);
     const isHRAdmin = ["hr", "founder"].includes(currentEmployee.designation);
 
     const whereConditions = [];
@@ -313,7 +318,7 @@ export class AttendanceService {
     month?: number,
     year?: number,
   ) {
-    const currentEmployee = await this.validateEmployee(session.user.id);
+    const currentEmployee = await this.validateEmployee(session.user.id, session.session.activeOrganizationId ?? undefined);
     const isHRAdmin = ["hr", "founder"].includes(currentEmployee.designation);
 
     let targetEmployeeId = employeeId;

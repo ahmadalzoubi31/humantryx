@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 import { Home, ArrowLeft, Building2, TrendingUp, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { siteConfig } from "@/lib/site-config";
 
 export default function NotFound() {
   const router = useRouter();
@@ -101,7 +102,7 @@ export default function NotFound() {
                   AI-Powered
                 </Badge>
                 <h2 className="text-foreground text-2xl font-semibold md:text-4xl">
-                  Humantryx
+                  {siteConfig.name}
                 </h2>
               </motion.div>
             </div>
@@ -160,7 +161,7 @@ export default function NotFound() {
               <span>Streamlining HR with AI since 2024</span>
             </div>
             <p className="text-muted-foreground/60 text-xs">
-              Humantryx - Where Technology Meets Human Resources
+              {siteConfig.name} - {siteConfig.tagline}
             </p>
           </motion.div>
         </motion.div>

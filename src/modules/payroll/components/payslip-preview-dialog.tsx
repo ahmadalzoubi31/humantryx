@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { siteConfig } from "@/lib/site-config";
 import {
   Dialog,
   DialogContent,
@@ -96,10 +97,10 @@ export function PayslipPreviewDialog({
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-xl text-blue-600">
-                    Humantryx
+                    {siteConfig.name}
                   </CardTitle>
                   <p className="text-muted-foreground text-sm">
-                    Human Resource Management System
+                    {siteConfig.description}
                   </p>
                 </div>
                 <div className="text-right">

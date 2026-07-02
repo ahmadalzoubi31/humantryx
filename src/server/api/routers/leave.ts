@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import {
@@ -105,14 +106,21 @@ export const leaveRouter = createTRPCRouter({
     .input(
       z.object({
         employeeId: z.string().uuid(),
-        organizationId: z.string(),
         year: z.number().optional(),
       }),
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
+      const organizationId = ctx.session.session.activeOrganizationId;
+      if (!organizationId) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "No active organization",
+        });
+      }
+
       return LeaveService.initializeEmployeeLeaveBalances(
         input.employeeId,
-        input.organizationId,
+        organizationId,
         input.year,
       );
     }),
@@ -120,26 +128,36 @@ export const leaveRouter = createTRPCRouter({
   initializeAllEmployeesBalances: protectedProcedure
     .input(
       z.object({
-        organizationId: z.string(),
         year: z.number().optional(),
       }),
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
+      const organizationId = ctx.session.session.activeOrganizationId;
+      if (!organizationId) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "No active organization",
+        });
+      }
+
       return LeaveService.initializeAllEmployeesLeaveBalances(
-        input.organizationId,
+        organizationId,
         input.year,
       );
     }),
 
   syncAllEmployeeLeaveBalances: protectedProcedure
-    .input(
-      z.object({
-        organizationId: z.string(),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ ctx }) => {
+      const organizationId = ctx.session.session.activeOrganizationId;
+      if (!organizationId) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "No active organization",
+        });
+      }
+
       return LeaveService.syncAllEmployeeLeaveBalances(
-        input.organizationId,
+        organizationId,
         ctx.session,
       );
     }),

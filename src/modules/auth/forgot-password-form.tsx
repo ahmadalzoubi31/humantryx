@@ -3,6 +3,7 @@ import { type ErrorContext } from "@better-fetch/fetch";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { siteConfig } from "@/lib/site-config";
 import {
   Card,
   CardContent,
@@ -77,7 +78,7 @@ export function ForgotPasswordForm({
             <div className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-green-400" />
           </div>
           <span className="text-foreground ml-2 text-xl font-bold">
-            Humantryx
+            {siteConfig.name}
           </span>
         </Link>
       </div>

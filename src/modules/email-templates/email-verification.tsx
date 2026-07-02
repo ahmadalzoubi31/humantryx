@@ -11,6 +11,7 @@ import {
   Tailwind,
   Text,
 } from "@react-email/components";
+import { siteConfig } from "@/lib/site-config";
 
 interface VerificationEmailTemplateProps {
   inviteLink: string;
@@ -19,7 +20,7 @@ interface VerificationEmailTemplateProps {
 
 export const VerificationEmailTemplate = ({
   inviteLink,
-  companyName = "Humantryx",
+  companyName = siteConfig.name,
 }: VerificationEmailTemplateProps) => {
   const previewText = `Verify your email address for ${companyName} platform.`;
 
@@ -109,6 +110,6 @@ export const VerificationEmailTemplate = ({
 };
 
 VerificationEmailTemplate.PreviewProps = {
-  inviteLink: "http://localhost:3000/verify-email?token=sample-token",
-  companyName: "Humantryx",
+  inviteLink: "http://localhost:3001/verify-email?token=sample-token",
+  companyName: siteConfig.name,
 };

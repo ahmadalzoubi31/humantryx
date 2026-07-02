@@ -1,5 +1,6 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
+import { siteConfig } from "@/lib/site-config";
 import type { PayrollRecordWithEmployee } from "../types";
 
 // Extend jsPDF type to include autoTable properties
@@ -43,7 +44,7 @@ export class PayslipPDF {
     this.doc.setTextColor(255, 255, 255);
     this.doc.setFont("helvetica", "bold");
     this.doc.setFontSize(10);
-    this.doc.text("ORG", this.margin + 6, this.margin + 9);
+    this.doc.text(siteConfig.logoText, this.margin + 6, this.margin + 9);
 
     // Company Name and Title (more compact)
     this.doc.setTextColor(0, 0, 0);
@@ -55,7 +56,7 @@ export class PayslipPDF {
     this.doc.setFont("helvetica", "normal");
     this.doc.setFontSize(8);
     this.doc.text(
-      "Human Resource Management System",
+      siteConfig.description,
       this.margin + 30,
       this.margin + 20,
     );
@@ -366,7 +367,7 @@ export class PayslipPDF {
       footerY,
     );
 
-    const companyText = `${organizationName || "Organization"} - Payroll System`;
+    const companyText = `${organizationName || siteConfig.name} - Payroll System`;
     const companyTextWidth = this.doc.getTextWidth(companyText);
     this.doc.text(
       companyText,

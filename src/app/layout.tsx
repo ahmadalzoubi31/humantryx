@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import { type Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
+import { siteConfig } from "@/lib/site-config";
 
 import { TRPCReactProvider } from "@/trpc/react";
 import { AbilityProvider } from "@/providers/ability-context";
@@ -15,9 +16,8 @@ import { Analytics } from "@vercel/analytics/next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 export const metadata: Metadata = {
-  title: "Humantryx | AI Powered Human Resource Management System",
-  description:
-    "A comprehensive HRMS solution leveraging AI for enhanced efficiency.",
+  title: `${siteConfig.name} | ${siteConfig.description}`,
+  description: siteConfig.description,
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 

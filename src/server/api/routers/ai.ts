@@ -2,6 +2,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { z } from "zod";
 import { LeaveService } from "../services/leave.service";
 import { AIService } from "../services/ai.service";
+import { assertFeatureAccess } from "../services/billing.service";
 
 export const aiRouter = createTRPCRouter({
   createLeaveRequest: protectedProcedure
@@ -11,6 +12,10 @@ export const aiRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const orgId = ctx.session.session.activeOrganizationId;
+      if (orgId) {
+        await assertFeatureAccess(orgId, "ai");
+      }
       const output = await AIService.generateLeaveRequest({ text: input.text });
       return LeaveService.createLeaveRequest(output, ctx.session);
     }),
@@ -23,6 +28,10 @@ export const aiRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const orgId = ctx.session.session.activeOrganizationId;
+      if (orgId) {
+        await assertFeatureAccess(orgId, "ai");
+      }
       const output = await AIService.screenResume(input);
       return output;
     }),

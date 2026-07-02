@@ -85,7 +85,6 @@ export function InitializeLeaveBalancesDialog({
     }
 
     initializeAllMutation.mutate({
-      organizationId,
       year: data.year,
     });
   };

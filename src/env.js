@@ -21,7 +21,7 @@ export const env = createEnv({
     EMAIL_VERIFICATION_CALLBACK_URL: z
       .string()
       .url()
-      .default("http://localhost:3000/api/auth/callback/email-verification"),
+      .default("http://localhost:3001/api/auth/callback/email-verification"),
     ORGANIZATION_INVITATION_CALLBACK_URL: z.string().url(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
@@ -49,6 +49,8 @@ export const env = createEnv({
     OPENAI_API_KEY: z.string().min(1, {
       message: "OPENAI_API_KEY must be set",
     }),
+    STRIPE_SECRET_KEY: z.string().optional(),
+    STRIPE_WEBHOOK_SECRET: z.string().optional(),
   },
 
   /**
@@ -65,6 +67,8 @@ export const env = createEnv({
     }),
     NEXT_PUBLIC_R2_PUBLIC_URL: z.string().url(),
     NEXT_PUBLIC_C15T_URL: z.string().url(),
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().optional(),
+    NEXT_PUBLIC_SITE_NAME: z.string().optional(),
   },
 
   /**
@@ -96,6 +100,10 @@ export const env = createEnv({
     PINECONE_INDEX: process.env.PINECONE_INDEX,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     NEXT_PUBLIC_C15T_URL: process.env.NEXT_PUBLIC_C15T_URL,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_SITE_NAME: process.env.NEXT_PUBLIC_SITE_NAME,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

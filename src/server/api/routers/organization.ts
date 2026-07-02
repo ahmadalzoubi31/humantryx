@@ -9,6 +9,7 @@ import {
   users as usersTable,
   employees,
 } from "@/server/db/schema";
+import { plans, subscriptions } from "@/server/db/subscriptions";
 import {
   createOrganizationSchema,
   joinOrganizationSchema,
@@ -150,6 +151,23 @@ export const organizationRouter = createTRPCRouter({
           throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",
             message: "Failed to create employee record",
+          });
+        }
+
+        // Auto-assign free plan to new organization
+        const [freePlan] = await db
+          .select()
+          .from(plans)
+          .where(eq(plans.tier, "free"))
+          .limit(1);
+
+        if (freePlan) {
+          await db.insert(subscriptions).values({
+            id: `sub_${organization.id}`,
+            organizationId: organization.id,
+            planId: freePlan.id,
+            status: "active",
+            seatCount: 1,
           });
         }
 

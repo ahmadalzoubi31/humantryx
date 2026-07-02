@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { EmployeeService } from "@/server/api/services/employee.service";
 import { InvitationService } from "@/server/api/services/invitation.service";
+import { assertSeatAvailable } from "@/server/api/services/billing.service";
 import {
   createEmployeeSchema,
   updateEmployeeSchema,
@@ -135,22 +136,21 @@ export const employeeRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const { session } = ctx;
 
-      const organizationId =
-        input.organizationId || session.session.activeOrganizationId;
+      const organizationId = session.session.activeOrganizationId;
 
-      // if (!organizationId) {
-      //   throw new TRPCError({
-      //     code: "BAD_REQUEST",
-      //     message: "Organization ID is required",
-      //   });
-      // }
+      if (!organizationId) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No active organization",
+        });
+      }
 
-      // if (session.session.activeOrganizationId !== organizationId) {
-      //   throw new TRPCError({
-      //     code: "FORBIDDEN",
-      //     message: "Not authorized to view employees in this organization",
-      //   });
-      // }
+      if (input.organizationId && session.session.activeOrganizationId !== input.organizationId) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Not authorized to view employees in this organization",
+        });
+      }
 
       return await EmployeeService.listEmployees({
         ...input,
@@ -179,6 +179,9 @@ export const employeeRouter = createTRPCRouter({
           message: "Not authorized to invite employees to this organization",
         });
       }
+
+      // Enforce seat limits based on the org's subscription plan
+      await assertSeatAvailable(input.organizationId);
 
       return await InvitationService.createEmployeeInvitation({
         email: input.email,
