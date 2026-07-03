@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { Check, Loader2, Crown } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { api } from "@/trpc/react";
 import { siteConfig } from "@/lib/site-config";
 
-export default function BillingPage() {
+function BillingPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loadingTier, setLoadingTier] = useState<string | null>(null);
@@ -69,12 +69,12 @@ export default function BillingPage() {
           <CardContent>
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Seats: {subQuery.data.subscription.seatCount} /{" "}
                   {subQuery.data.plan.seatLimit}
                 </p>
                 {subQuery.data.subscription.stripeCurrentPeriodEnd && (
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     Renews on{" "}
                     {new Date(
                       subQuery.data.subscription.stripeCurrentPeriodEnd,
@@ -137,10 +137,7 @@ export default function BillingPage() {
 
                   <ul className="space-y-2">
                     {plan.features.map((feature, i) => (
-                      <li
-                        key={i}
-                        className="flex items-start gap-2 text-sm"
-                      >
+                      <li key={i} className="flex items-start gap-2 text-sm">
                         <Check className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
                         {feature}
                       </li>
@@ -184,5 +181,13 @@ export default function BillingPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function BillingPage() {
+  return (
+    <Suspense fallback={<Loader2 className="m-auto h-6 w-6 animate-spin" />}>
+      <BillingPageContent />
+    </Suspense>
   );
 }

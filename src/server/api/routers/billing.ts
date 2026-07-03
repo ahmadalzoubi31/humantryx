@@ -2,17 +2,10 @@ import { TRPCError } from "@trpc/server";
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/server/db";
-import {
-  plans,
-  subscriptions,
-  type planTier,
-} from "@/server/db/subscriptions";
+import { plans, subscriptions, type planTier } from "@/server/db/subscriptions";
 import { env } from "@/env";
 import { stripe } from "@/lib/stripe";
-import {
-  createTRPCRouter,
-  protectedProcedure,
-} from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 type PlanTier = (typeof planTier.enumValues)[number];
 
@@ -130,7 +123,7 @@ export const billingRouter = createTRPCRouter({
         .from(plans)
         .where(eq(plans.tier, input.planTier));
 
-      if (!plan || !plan.stripePriceId) {
+      if (!plan?.stripePriceId) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Plan not found or Stripe price not configured",
@@ -174,7 +167,10 @@ export const billingRouter = createTRPCRouter({
 
     const orgId = ctx.session.session.activeOrganizationId;
     if (!orgId) {
-      throw new TRPCError({ code: "FORBIDDEN", message: "No active organization" });
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "No active organization",
+      });
     }
 
     const [sub] = await db
