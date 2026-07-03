@@ -21,6 +21,7 @@
     "typecheck": "tsc --noEmit",
     "better-auth:generate": "npx @better-auth/cli@latest generate --config src/server/auth/index.ts"
   },
+  
   "dependencies": {
     "@ai-sdk/react": "^1.2.12",
     "@aws-sdk/client-s3": "3.744.0",
