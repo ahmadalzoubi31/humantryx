@@ -1,5 +1,6 @@
 export * from "./users";
 export * from "./organizations";
+export * from "./organization-settings";
 export * from "./employees";
 export * from "./leaves";
 export * from "./attendance";

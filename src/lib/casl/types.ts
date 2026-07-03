@@ -14,6 +14,7 @@ export const subjects = [
   "Company",
   "AI",
   "Organization",
+  "OrganizationSettings",
   "News",
   "Recruitment",
 ] as const;
@@ -30,8 +31,9 @@ export type Subjects =
   | "Company"
   | "AI"
   | "Organization"
+  | "OrganizationSettings"
   | "News"
   | "Recruitment"
-  | "Documents"
+  | "Documents";
 
 export type AppAbility = MongoAbility<[Actions, Subjects]>;

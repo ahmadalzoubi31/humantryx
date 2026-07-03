@@ -178,6 +178,11 @@ export const getMenuItems = (ability: AppAbility) => {
       enabled: ability.can("manage", "Employee"),
       submenu: [
         {
+          title: "General",
+          href: "/dashboard/settings",
+          enabled: ability.can("manage", "OrganizationSettings"),
+        },
+        {
           title: "Billing",
           href: "/dashboard/settings/billing",
           enabled: ability.can("manage", "Employee"),

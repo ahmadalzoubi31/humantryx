@@ -1,4 +1,5 @@
 import { organizationRouter } from "@/server/api/routers/organization";
+import { organizationSettingsRouter } from "@/server/api/routers/organization-settings";
 import { adminRouter } from "@/server/api/routers/admin";
 import { employeeRouter } from "@/server/api/routers/employee";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
@@ -21,6 +22,7 @@ import { billingRouter } from "./routers/billing";
  */
 export const appRouter = createTRPCRouter({
   organization: organizationRouter,
+  organizationSettings: organizationSettingsRouter,
   admin: adminRouter,
   employee: employeeRouter,
   invitation: invitationRouter,
