@@ -120,5 +120,5 @@ EmployeeInvitationEmail.PreviewProps = {
   organizationName: "Acme Inc",
   designation: "Software Engineer",
   invitationId: "inv_123456789",
-  appUrl: "http://localhost:3001",
+  appUrl: "http://localhost:3030",
 };

@@ -55,5 +55,5 @@ export const ChangeEmailVerificationTemplate = ({
 };
 
 ChangeEmailVerificationTemplate.PreviewProps = {
-  inviteLink: "http://localhost:3001",
+  inviteLink: "http://localhost:3030",
 };

@@ -34,7 +34,8 @@ export const ResetPasswordEmailTemplate = ({
               <strong>Reset Your Password</strong>
             </Heading>
             <Text className="text-[14px] leading-[24px] text-black">
-              We received a request to reset your password for your {siteConfig.name}
+              We received a request to reset your password for your{" "}
+              {siteConfig.name}
               account. Click the button below to create a new password.
             </Text>
             <Section className="mt-[32px] mb-[32px] text-center">
@@ -64,5 +65,5 @@ export const ResetPasswordEmailTemplate = ({
 };
 
 ResetPasswordEmailTemplate.PreviewProps = {
-  inviteLink: "http://localhost:3001",
+  inviteLink: "http://localhost:3030",
 };

@@ -21,7 +21,7 @@ export const env = createEnv({
     EMAIL_VERIFICATION_CALLBACK_URL: z
       .string()
       .url()
-      .default("http://localhost:3001/api/auth/callback/email-verification"),
+      .default("http://localhost:3030/api/auth/callback/email-verification"),
     ORGANIZATION_INVITATION_CALLBACK_URL: z.string().url(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
@@ -102,7 +102,8 @@ export const env = createEnv({
     NEXT_PUBLIC_C15T_URL: process.env.NEXT_PUBLIC_C15T_URL,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
-    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
+      process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     NEXT_PUBLIC_SITE_NAME: process.env.NEXT_PUBLIC_SITE_NAME,
   },
   /**

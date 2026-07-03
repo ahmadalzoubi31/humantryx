@@ -47,7 +47,7 @@ export const VerificationEmailTemplate = ({
                 href={inviteLink}
                 className="rounded-lg bg-[#4f46e5] px-6 py-3 text-base font-semibold text-white no-underline"
               >
-                Verify Email 
+                Verify Email
               </Button>
             </Section>
 
@@ -110,6 +110,6 @@ export const VerificationEmailTemplate = ({
 };
 
 VerificationEmailTemplate.PreviewProps = {
-  inviteLink: "http://localhost:3001/verify-email?token=sample-token",
+  inviteLink: "http://localhost:3030/verify-email?token=sample-token",
   companyName: siteConfig.name,
 };
