@@ -7,6 +7,7 @@ import { env } from "./src/env.js";
 
 /** @type {import("next").NextConfig} */
 const config = {
+  serverExternalPackages: ["isomorphic-dompurify", "jsdom"],
   images: {
     remotePatterns: [
       {

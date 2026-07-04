@@ -17,7 +17,20 @@ import { env } from "@/env";
 import { organization } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
 
+const trustedOrigins = Array.from(
+  new Set(
+    [
+      env.NEXT_PUBLIC_APP_URL,
+      env.NEXT_PUBLIC_BETTER_AUTH_URL,
+      env.BETTER_AUTH_URL,
+    ]
+      .filter(Boolean)
+      .map((url) => new URL(url).origin),
+  ),
+);
+
 export const auth = betterAuth({
+  trustedOrigins,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: schema,
